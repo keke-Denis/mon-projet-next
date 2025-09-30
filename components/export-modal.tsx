@@ -18,10 +18,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
       <DialogContent className="max-w-md">
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <DialogTitle>Exportation de données</DialogTitle>
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="w-4 h-4" />
-            </Button>
+            <DialogTitle className="text-[#76bc21]">Exportation de données</DialogTitle>
           </div>
         </DialogHeader>
 
@@ -36,7 +33,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
             <Input type="date" defaultValue="2024-03-31" placeholder="JJ / MM / AA" />
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 ">
             <Label>Format du document à exporter</Label>
             <Select>
               <SelectTrigger>
@@ -65,7 +62,7 @@ export function ExportModal({ isOpen, onClose }: ExportModalProps) {
             </Select>
           </div>
 
-          <Button className="w-full bg-primary text-primary-foreground">Valider l'insertion</Button>
+          <Button className="w-full bg-[#76bc21] text-primary-foreground hover:bg-[#5aa017] cursor-pointer">Valider l'insertion</Button>
         </div>
       </DialogContent>
     </Dialog>

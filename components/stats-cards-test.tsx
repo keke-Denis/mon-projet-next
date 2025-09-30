@@ -1,9 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card"
 
 const stats = [
-  { title: "Total des griffes", value: "24 kg", bgColor: "#124734", textColor: "#ffffff" },
-  { title: "Total des feuilles", value: "24 kg", bgColor: "#76bc21", textColor: "#ffffff" },
-  { title: "Total des clous", value: "24 kg", bgColor: "#089a8d", textColor: "#ffffff" },
+  { title: "Total de H.E des griffes", value: "50 kg", bgColor: "#124734", textColor: "#ffffff" },
+  { title: "Total de H.E des feuilles", value: "50 kg", bgColor: "#76bc21", textColor: "#ffffff" },
+  { title: "Total de H.E des clous", value: "50 kg", bgColor: "#089a8d", textColor: "#ffffff" },
 ]
 export function StatsCards() {
   return (

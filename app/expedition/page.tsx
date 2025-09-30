@@ -11,7 +11,9 @@ export default function ExpeditionPage() {
 
   return (
     <div className="flex h-screen bg-background">
-      <Sidebar currentPage="expedition" />
+      <div className="hidden md:flex">
+        <Sidebar currentPage="expedition" />
+      </div>
       <div className="flex-1 flex flex-col overflow-hidden">
         <ExpeditionHeader onExportClick={() => setIsExportModalOpen(true)} />
         <main className="flex-1 overflow-auto p-6">

@@ -8,7 +8,10 @@ import { CollectionPoints } from "@/components/collection-points"
 export default function DashboardPage() {
   return (
     <div className="flex h-screen bg-background">
-      <Sidebar currentPage="dashboard" />
+      <div className="hidden md:flex">
+        <Sidebar currentPage="dashboard" />
+      </div>
+
       <div className="flex-1 flex flex-col overflow-hidden">
         <DashboardHeader />
         <main className="flex-1 overflow-auto p-6">

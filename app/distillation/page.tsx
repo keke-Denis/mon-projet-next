@@ -60,16 +60,14 @@ export default function DistillationPage() {
         <div className="bg-card border-b border-border p-6">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold text-foreground">Gestion de la distillation</h1>
-            <div className="flex items-center space-x-2">
-              <span className="text-sm text-muted-foreground">Jhon Doe</span>
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <span className="text-primary-foreground text-sm font-medium">JD</span>
-              </div>
-              <ChevronDown className="w-4 h-4 text-muted-foreground" />
+              <div className="flex items-center space-x-2 bg-muted px-3 py-2 rounded-lg">
+            <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-primary-foreground text-sm font-medium">JD</span>
             </div>
+            <span className="text-sm font-medium">Jhon Doe</span>
+          </div>
           </div>
         </div>
-
         {/* Stats Cards */}
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">

@@ -1,45 +1,61 @@
 "use client"
 
 import { Card, CardContent } from "@/components/ui/card"
-import { Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, AreaChart } from "recharts"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Legend } from "recharts"
 
 const data = [
-  { day: "Vangaindrano", value: 20 },
-  { day: "Manambondro", value: 35 },
-  { day: "Vohipeno", value: 50 },
-  { day: "Manakara", value: 70 },
-  { day: "Matangy", value: 25 },
-  { day: "Ampasimandreva", value: 60 }
+  { name: "Vangaindrano", feuilles: 30, griffes: 20, clous: 10 },
+  { name: "Manambondro", feuilles: 35, griffes: 25, clous: 15 },
+  { name: "Vohipeno", feuilles: 40, griffes: 30, clous: 20 },
+  { name: "Manakara", feuilles: 20, griffes: 15, clous: 25 },
+  { name: "Matangy", feuilles: 50, griffes: 35, clous: 30 },
+  { name: "Ampasimandreva", feuilles: 45, griffes: 40, clous: 35 },
 ]
 
 export function PerformanceChart() {
   return (
     <div className="space-y-4">
-      <h2 className="text-xl font-bold text-foreground">PERFORMANCE DES POINTS DE COLLECTE</h2>
-
+      <h2 className="text-xl font-bold text-foreground">
+        PERFORMANCE DES POINTS DE COLLECTE
+      </h2>
       <Card>
         <CardContent className="p-6">
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data}>
-                <defs>
-                  <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#f97316" stopOpacity={0.3} />
-                    <stop offset="95%" stopColor="#f97316" stopOpacity={0.1} />
-                  </linearGradient>
-                </defs>
+              <LineChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6b7280" }} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6b7280" }} domain={[0, 100]} />
-                <Area type="monotone" dataKey="value" stroke="#f97316" strokeWidth={3} fill="url(#colorGradient)" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6b7280" }} />
+                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: "#6b7280" }} />
+                <Tooltip />
+                <Legend />
+
+                {/* Feuilles */}
                 <Line
                   type="monotone"
-                  dataKey="value"
-                  stroke="#f97316"
+                  dataKey="feuilles"
+                  stroke="#76bc21"
                   strokeWidth={3}
-                  dot={{ fill: "#f97316", strokeWidth: 2, r: 4 }}
+                  dot={{ fill: "#76bc21", r: 4 }}
                 />
-              </AreaChart>
+
+                {/* Griffes */}
+                <Line
+                  type="monotone"
+                  dataKey="griffes"
+                  stroke="#124734"
+                  strokeWidth={3}
+                  dot={{ fill: "#124734", r: 4 }}
+                />
+
+                {/* Clous */}
+                <Line
+                  type="monotone"
+                  dataKey="clous"
+                  stroke="#089a8d"
+                  strokeWidth={3}
+                  dot={{ fill: "#089a8d", r: 4 }}
+                />
+              </LineChart>
             </ResponsiveContainer>
           </div>
         </CardContent>
