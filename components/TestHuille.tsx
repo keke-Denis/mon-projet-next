@@ -64,9 +64,7 @@ export function TestHuille({ isOpen, onClose }: TestHuilleProps) {
                 <SelectValue placeholder="Sélectionnez un type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="griffe">Griffe</SelectItem>
                 <SelectItem value="feuille">Feuille</SelectItem>
-                <SelectItem value="clous">Clous</SelectItem>
               </SelectContent>
             </Select>
           </div>

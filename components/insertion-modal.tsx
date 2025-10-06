@@ -13,25 +13,25 @@ interface InsertionModalProps {
 }
 
 export function InsertionModal({ isOpen, onClose }: InsertionModalProps) {
-  const [currentStep, setCurrentStep] = useState<number>(1)
-  const [typeMatiere, setTypeMatiere] = useState<string>("clous")
+  const [currentStep, setCurrentStep] = useState(1)
+  const [typeMatiere, setTypeMatiere] = useState("")
 
   // Champs qui changent selon type de matière
-  const [dateHeure, setDateHeure] = useState<string>("")
-  const [localisation, setLocalisation] = useState<string>("Vohipeno (auto-généré)")
-  const [designation, setDesignation] = useState<string>("Pv reception clous")
-  const [poidsBrut, setPoidsBrut] = useState<string>("")
-  const [poidsPackaging, setPoidsPackaging] = useState<string>("")
-  const [poidsNet, setPoidsNet] = useState<string>("")
-  const [poidsAgree, setPoidsAgree] = useState<string>("") // Pour Griffes
-  const [unites, setUnites] = useState<string>("")
-  const [prixUnitaire, setPrixUnitaire] = useState<string>("")
-  const [tauxDessication, setTauxDessication] = useState<string>("")
-  const [tauxHumidite, setTauxHumidite] = useState<string>("")
-  const [densite, setDensite] = useState<string>("") // Pour Griffes
+  const [dateHeure, setDateHeure] = useState("")
+  const [localisation, setLocalisation] = useState("")
+  const [designation, setDesignation] = useState("")
+  const [poidsBrut, setPoidsBrut] = useState("")
+  const [poidsPackaging, setPoidsPackaging] = useState("")
+  const [poidsNet, setPoidsNet] = useState("")
+  const [poidsAgree, setPoidsAgree] = useState("") // Pour Griffes
+  const [unites, setUnites] = useState("")
+  const [prixUnitaire, setPrixUnitaire] = useState("")
+  const [tauxDessication, setTauxDessication] = useState("")
+  const [tauxHumidite, setTauxHumidite] = useState("")
+  const [densite, setDensite] = useState("") // Pour Griffes
 
-  const [provenance, setProvenance] = useState<string>("") 
-  const [autreProvenance, setAutreProvenance] = useState<string>("") 
+  const [provenance, setProvenance] = useState("")
+  const [autreProvenance, setAutreProvenance] = useState("")
 
   const handleNext = () => setCurrentStep(2)
   const handleBack = () => setCurrentStep(1)
@@ -82,7 +82,7 @@ export function InsertionModal({ isOpen, onClose }: InsertionModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg rounded-2xl shadow-lg p-6">
+      <DialogContent className="w-[95%] max-w-md sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-lg font-semibold text-[#76bc21]">
             PV de réception
@@ -172,7 +172,7 @@ export function InsertionModal({ isOpen, onClose }: InsertionModalProps) {
                   </div>
                   <div>
                     <Label className="font-semibold text-xl">Localisation</Label>
-                    <Input placeholder={localisation} value={localisation} onChange={e=>setLocalisation(e.target.value)} type="text" />
+                    <Input placeholder="Adresse de fournisseur" type="text" />
                   </div>
                 </div>
                 <Label className="font-semibold text-xl">Contact</Label>

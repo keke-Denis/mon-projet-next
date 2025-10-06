@@ -13,7 +13,7 @@ export function DashboardHeader() {
     <header className="bg-card border-b border-border p-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Tableaux de bord</h1>
+          <h1 className="text-2xl font-bold text-foreground ml-5 top-5">Tableaux de bord</h1>
         </div>
           {/* Utilisateur */}
           <div className="flex items-center space-x-2">

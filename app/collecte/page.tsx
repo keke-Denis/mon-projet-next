@@ -34,16 +34,16 @@ export default function CollectePage() {
 
   return (
     <div className="flex h-screen bg-background">
-      <div className="hidden md:flex">
+      <div className="md:flex">
         <Sidebar currentPage="collecte" />
       </div>
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header
-          onInsertionClick={() => setIsInsertionModalOpen(true)}
-          onExportClick={() => setIsExportModalOpen(true)}
+      <div className="flex-1 flex flex-col overflow-hidden ">
+        <Header 
+         title="Gestion de collecte"
+         onInsertionClick={() => console.log("Insertion clicked")}
+         onExportClick={() => console.log("Export clicked")}
         />
-
         <div className="flex flex-col md:flex-row items-center justify-center mt-4 space-y-2 md:space-y-0 md:space-x-4">
           <button
             className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold ${

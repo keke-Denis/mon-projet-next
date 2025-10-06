@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { MoreVertical, ChevronLeft, ChevronRight, Plus, FileText, Truck, CheckCircle, FlaskConical, Receipt } from "lucide-react"
+import { MoreVertical, ChevronLeft, ChevronRight, Plus, FileText, Truck, CheckCircle, FlaskConical, Receipt, Search, Download } from "lucide-react"
 
 // Import de tes modals
 import { FacturationModal } from "./FacturationModal"
@@ -13,19 +13,104 @@ import { FicheLivraisonModal } from "./FicheLivraison-test"
 import { ConfirmationModal } from "./ConfirmationModal"
 import { InsertionModalTest } from "./insertion-modal-test"
 import { LivraisonTest } from "./Livraison-test"
-import { TestHuille } from "./TestHuille" // ← modal Test Huile
+import { TestHuille } from "./TestHuille"
 
 const mockData = [
-  { id: 1, date: "24 Mars 2024", type: "Feuilles", quantity: 10, location: "Manakara", status: "En attente de livraison" },
-  { id: 2, date: "24 Mars 2024", type: "Griffes", quantity: 10, location: "Menambondro", status: "Accepté" },
-  { id: 3, date: "24 Mars 2024", type: "Griffes", quantity: 10, location: "Manakara", status: "Test en attente" },
-  { id: 4, date: "24 Mars 2024", type: "Clous", quantity: 10, location: "Menambondro", status: "En cours de test" },
-  { id: 5, date: "24 Mars 2024", type: "Clous", quantity: 10, location: "Manakara", status: "Livraison en cours" },
+  { id: 1, date: "24 Mars 2024", type: "Feuilles",  poids: 10, quantity: 10, location: "Manakara", status: "En attente de livraison" },
+  { id: 2, date: "24 Mars 2024", type: "Griffes", poids: 10, quantity: 10, location: "Menambondro", status: "Accepté" },
+  { id: 3, date: "24 Mars 2024", type: "Griffes", poids: 10, quantity: 10, location: "Manakara", status: "Test en attente" },
+  { id: 4, date: "24 Mars 2024", type: "Clous", poids: 10, quantity: 10, location: "Menambondro", status: "En cours de test" },
+  { id: 5, date: "24 Mars 2024", type: "Clous", poids: 10, quantity: 10, location: "Manakara", status: "Livraison en cours" },  
 ]
+
+// Mobile Card Component
+function MobileCard({ 
+  item, 
+  isOpen, 
+  onToggle, 
+  renderActions 
+}: { 
+  item: typeof mockData[0]
+  isOpen: boolean
+  onToggle: () => void
+  renderActions: (item: typeof mockData[0]) => React.ReactNode
+}) {
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "En attente de livraison": return "bg-amber-100 text-amber-800 border-amber-200"
+      case "Accepté": return "bg-green-100 text-green-800 border-green-200"
+      case "Test en attente": return "bg-blue-100 text-blue-800 border-blue-200"
+      case "En cours de test": return "bg-purple-100 text-purple-800 border-purple-200"
+      case "Livraison en cours": return "bg-orange-100 text-orange-800 border-orange-200"
+      default: return "bg-gray-100 text-gray-800 border-gray-200"
+    }
+  }
+
+  return (
+    <Card className="mb-4 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200">
+      <CardContent className="p-4">
+        {/* Header avec ID et actions */}
+        <div className="flex justify-between items-start mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+              <span className="text-white text-sm font-bold">#{item.id}</span>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Test #{item.id}</h3>
+              <p className="text-sm text-gray-600">{item.date}</p>
+            </div>
+          </div>
+          <Button
+            size="sm"
+            variant="outline"
+            className={`p-2 border-gray-300 ${item.status === "Livraison en cours" ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+            onClick={onToggle}
+            disabled={item.status === "Livraison en cours"}
+          >
+            <MoreVertical className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* Informations détaillées */}
+        <div className="grid grid-cols-2 gap-3 text-sm mb-3">
+          <div className="space-y-1">
+            <p className="font-medium text-gray-700">Type MP</p>
+            <Badge variant="secondary" className="bg-[#76bc21] text-white">
+              {item.type}
+            </Badge>
+          </div>
+          <div className="space-y-1">
+            <p className="font-medium text-gray-700">Poids tester</p>
+            <p className="font-semibold text-gray-900">{item.location}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="font-medium text-gray-700">Statut</p>
+            <Badge variant="outline" className={`${getStatusColor(item.status)} font-medium`}>
+              {item.status}
+            </Badge>
+          </div>
+          <div className="space-y-1">
+            <p className="font-medium text-gray-700">Teneur en eau</p>
+            <p className="font-semibold text-gray-900">{item.quantity} kg</p>
+          </div>
+        </div>
+
+        {/* Actions menu */}
+        {isOpen && (
+          <div className="border-t pt-3 mt-3">
+            <div className="grid grid-cols-1 gap-1">
+              {renderActions(item)}
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
 
 export function DataTable() {
   const [isLivraisonTestOpen, setIsLivraisonTestOpen] = useState(false)
-  const [isTestHuilleOpen, setIsTestHuilleOpen] = useState(false) // State pour modal Test Huile
+  const [isTestHuilleOpen, setIsTestHuilleOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [openMenuId, setOpenMenuId] = useState<number | null>(null)
 
@@ -42,78 +127,94 @@ export function DataTable() {
 
   const toggleMenu = (id: number) => {
     const item = mockData.find(item => item.id === id)
-    if (item && item.status === "Livraison en cours") return // Désactiver menu
+    if (item && item.status === "Livraison en cours") return
     setOpenMenuId(openMenuId === id ? null : id)
   }
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "En attente de livraison": return "bg-amber-100 text-amber-800 border-amber-200"
+      case "Accepté": return "bg-green-100 text-green-800 border-green-200"
+      case "Test en attente": return "bg-blue-100 text-blue-800 border-blue-200"
+      case "En cours de test": return "bg-purple-100 text-purple-800 border-purple-200"
+      case "Livraison en cours": return "bg-orange-100 text-orange-800 border-orange-200"
+      default: return "bg-gray-100 text-gray-800 border-gray-200"
+    }
+  }
+
   const renderActions = (item: typeof mockData[0]) => {
+    const btnClass = "flex items-center gap-3 w-full px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors duration-200 text-left rounded-lg border border-transparent hover:border-gray-200"
+
     switch (item.status) {
       case "Accepté":
         return (
-          <div className="p-2">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="w-full flex items-center gap-2"
-              onClick={() => setIsFacturationOpen(true)}
-            >
-              <Receipt className="w-4 h-4" /> Facturer
-            </Button>
-          </div>
+          <button className={btnClass} onClick={() => setIsFacturationOpen(true)}>
+            <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+              <Receipt className="w-4 h-4 text-blue-600" />
+            </div>
+            <div>
+              <div className="font-medium text-gray-900">Facturer</div>
+              <div className="text-xs text-gray-500">Générer une facture</div>
+            </div>
+          </button>
         )
 
       case "Test en attente":
         return (
-          <div className="p-2">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="w-full flex items-center gap-2"
-              onClick={() => setIsTestHuilleOpen(true)} // Ouvre le modal Test Huile
-            >
-              <FlaskConical className="w-4 h-4" /> Test Huile
-            </Button>
-          </div>
+          <button className={btnClass} onClick={() => setIsTestHuilleOpen(true)}>
+            <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+              <FlaskConical className="w-4 h-4 text-purple-600" />
+            </div>
+            <div>
+              <div className="font-medium text-gray-900">Test Huile</div>
+              <div className="text-xs text-gray-500">Effectuer le test</div>
+            </div>
+          </button>
         )
 
       case "En cours de test":
         return (
-          <div className="p-2">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="w-full flex items-center gap-2"
-              onClick={() => setIsConfirmLivraisonOpen(true)}
-            >
-              <CheckCircle className="w-4 h-4" /> Validation Test
-            </Button>
-          </div>
+          <button className={btnClass} onClick={() => setIsConfirmLivraisonOpen(true)}>
+            <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+              <CheckCircle className="w-4 h-4 text-green-600" />
+            </div>
+            <div>
+              <div className="font-medium text-gray-900">Validation Test</div>
+              <div className="text-xs text-gray-500">Confirmer les résultats</div>
+            </div>
+          </button>
         )
 
       case "En attente de livraison":
         return (
-          <div className="p-2 space-y-1 text-left">
-            <Button
-              size="sm"
-              variant="ghost"
-              className="w-full flex gap-2"
-              onClick={() => setIsFicheLivraisonOpen(true)}
-            >
-              <FileText className="w-4 h-4" /> Fiche Livraison
-            </Button>
-            <Button
-              size="sm"
-              variant="ghost"
-              className="w-full flex gap-2"
-              onClick={() => setIsLivraisonTestOpen(true)}
-            >
-              <Truck className="w-4 h-4" /> Livraison
-            </Button>
+          <div className="space-y-1">
+            <button className={btnClass} onClick={() => setIsFicheLivraisonOpen(true)}>
+              <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center">
+                <FileText className="w-4 h-4 text-amber-600" />
+              </div>
+              <div>
+                <div className="font-medium text-gray-900">Fiche Livraison</div>
+                <div className="text-xs text-gray-500">Document de livraison</div>
+              </div>
+            </button>
+            <button className={btnClass} onClick={() => setIsLivraisonTestOpen(true)}>
+              <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                <Truck className="w-4 h-4 text-orange-600" />
+              </div>
+              <div>
+                <div className="font-medium text-gray-900">Livraison</div>
+                <div className="text-xs text-gray-500">Organiser la livraison</div>
+              </div>
+            </button>
           </div>
         )
 
       default:
-        return <div className="p-2 text-sm text-gray-500">Aucune action disponible</div>
+        return (
+          <div className="px-4 py-3 text-sm text-gray-500 text-center">
+            Aucune action disponible
+          </div>
+        )
     }
   }
 
@@ -124,93 +225,129 @@ export function DataTable() {
 
   return (
     <>
-      <Card>
-        <CardHeader className="flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0">
-          <div className="flex items-center space-x-2">
+      <Card className="border border-gray-200 shadow-sm">
+        <CardHeader className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 pb-6">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               size="sm"
-              className="bg-[#76bc21] text-white hover:bg-[#5aa017] cursor-pointer"
+              className="bg-[#76bc21] hover:bg-[#5aa017] text-white cursor-pointer transition-colors duration-200 shadow-sm"
               onClick={() => setIsInsertionOpen(true)}
             >
               <Plus className="w-4 h-4 mr-2" />
               Ajouter
             </Button>
-            <Button variant="outline" size="sm" className="cursor-pointer">
+            <Button variant="outline" size="sm" className="cursor-pointer border-gray-300 hover:bg-gray-50 transition-colors duration-200">
+              <Download className="w-4 h-4 mr-2" />
               Exporter
             </Button>
-            <Button variant="outline" size="sm" className="cursor-pointer">
+            <Button variant="outline" size="sm" className="cursor-pointer border-gray-300 hover:bg-gray-50 transition-colors duration-200">
+              <Truck className="w-4 h-4 mr-2" />
               Livraison
             </Button>
           </div>
-          <Input
-            type="text"
-            placeholder="Rechercher..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-70"
-          />
+          <div className="relative w-full md:w-auto">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <Input
+              type="text"
+              placeholder="Rechercher par type ou provenance..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 w-full md:w-80 border-gray-300 focus:border-[#76bc21] transition-colors duration-200"
+            />
+          </div>
         </CardHeader>
 
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b bg-muted/50">
-                  <th className="p-3 font-medium">ID</th>
-                  <th className="p-3 font-medium">Date de réception</th>
-                  <th className="p-3 font-medium">Type MP</th>
-                  <th className="p-3 font-medium">Poids tester</th>
-                  <th className="p-3 font-medium">Status</th>
-                  <th className="p-3 font-medium">Teneur en eau</th>
-                  <th className="p-3 font-medium">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredData.map((item) => (
-                  <tr key={item.id} className="border-b hover:bg-gray-100 transition-colors">
-                    <td className="p-3 font-medium">{item.id}</td>
-                    <td className="p-3">{item.date}</td>
-                    <td className="p-3">
-                      <Badge variant="secondary" className="bg-[#76bc21] text-white">
-                        {item.type}
-                      </Badge>
-                    </td>
-                    <td className="p-3">{item.location}</td>
-                    <td className="p-3">{item.status}</td>
-                    <td className="p-3">{item.quantity} kg</td>
-                    <td className="p-3 relative">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        className={`p-1 ${item.status === "Livraison en cours" ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
-                        onClick={() => toggleMenu(item.id)}
-                        disabled={item.status === "Livraison en cours"}
-                      >
-                        <MoreVertical className="w-4 h-4" />
-                      </Button>
-
-                      {openMenuId === item.id && (
-                        <div className="absolute right-0 top-full mt-2 w-52 bg-white border rounded shadow-lg z-10">
-                          {renderActions(item)}
-                        </div>
-                      )}
-                    </td>
+        <CardContent className="p-0">
+          {/* Desktop Table */}
+          <div className="hidden md:block">
+            <div className="overflow-x-auto rounded-lg">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-gradient-to-r from-[#76bc21] to-[#5aa017] text-white">
+                    <th className="p-4 font-semibold text-sm text-left">ID</th>
+                    <th className="p-4 font-semibold text-sm text-left">Date de réception</th>
+                    <th className="p-4 font-semibold text-sm text-left">Type MP</th>
+                    <th className="p-4 font-semibold text-sm text-left">Provenance</th>
+                    <th className="p-4 font-semibold text-sm text-left">Poids tester</th>
+                    <th className="p-4 font-semibold text-sm text-left">Status</th>
+                    <th className="p-4 font-semibold text-sm text-left">Teneur en eau</th>
+                    <th className="p-4 font-semibold text-sm text-center">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {filteredData.map((item) => (
+                    <tr key={item.id} className="border-b border-gray-100 hover:bg-gray-50/50 transition-colors duration-150">
+                      <td className="p-4 font-medium text-gray-900">
+                        <div className="flex items-left gap-2">
+                          <div className="w-8 h-8 bg-[#76bc21] rounded-lg flex items-center justify-center">
+                            <span className="text-white text-sm font-bold">#{item.id}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-4 text-gray-700 text-left">{item.date}</td>
+                      <td className="p-4 text-left">
+                          {item.type}
+                      </td>
+                      <td className="p-4 text-gray-700 text-left">{item.location}</td>
+                      <td className="p-4 text-gray-700 text-left">{item.quantity}kg</td>
+                      <td className="p-4 text-left">
+                        <Badge variant="outline" className={`${getStatusColor(item.status)} px-3 py-1 font-medium `}>
+                          {item.status}
+                        </Badge>
+                      </td>
+                      <td className="p-4 text-left">
+                        <span className="font-semibold text-gray-900 ">{item.poids} L</span>
+                      </td>
+                      <td className="p-4 relative text-center">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className={`p-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200 ${
+                            item.status === "Livraison en cours" ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+                          }`}
+                          onClick={() => toggleMenu(item.id)}
+                          disabled={item.status === "Livraison en cours"}
+                        >
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+
+                        {openMenuId === item.id && (
+                          <div className="absolute right-0 top-full mt-1 w-64 bg-white border border-gray-200 rounded-xl shadow-xl z-10 overflow-hidden">
+                            {renderActions(item)}
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-muted-foreground">
-              {filteredData.length} résultats
+          {/* Mobile Cards */}
+          <div className="md:hidden p-4 space-y-4">
+            {filteredData.map((item) => (
+              <MobileCard
+                key={item.id}
+                item={item}
+                isOpen={openMenuId === item.id}
+                onToggle={() => toggleMenu(item.id)}
+                renderActions={renderActions}
+              />
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 border-t border-gray-200">
+            <div className="text-sm text-gray-600 text-center sm:text-left">
+              <span className="font-medium text-gray-900">{filteredData.length}</span> résultat{filteredData.length > 1 ? 's' : ''} trouvé{filteredData.length > 1 ? 's' : ''}
             </div>
-            <div className="flex items-center space-x-2">
-              <Button variant="outline" size="sm" disabled>
-                <ChevronLeft className="w-4 h-4" /> Préc
+            <div className="flex items-center justify-center space-x-2">
+              <Button variant="outline" size="sm" disabled className="border-gray-300 hover:bg-gray-50 transition-colors duration-200">
+                <ChevronLeft className="w-4 h-4 mr-1" /> Préc
               </Button>
-              <Button variant="outline" size="sm" disabled>
-                Suiv <ChevronRight className="w-4 h-4" />
+              <Button variant="outline" size="sm" disabled className="border-gray-300 hover:bg-gray-50 transition-colors duration-200">
+                Suiv <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </div>
           </div>
