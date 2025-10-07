@@ -5,20 +5,21 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
-import { MoreVertical, ChevronLeft, ChevronRight, Plus, FileText, Truck, CheckCircle, FlaskConical, Receipt, Search, Download } from "lucide-react"
+import { MoreVertical, ChevronLeft, ChevronRight, Plus, FileText, Truck, CheckCircle, Receipt, Search, Download } from "lucide-react"
 
 // Import de tes modals
-import { FacturationModal } from "./FacturationModal"
+import { FacturationHuilleEssentielle } from "./FacturationHuilleEssentielle"
 import { FicheLivraisonModal } from "./FicheLivraison-test"
 import { ConfirmationModal } from "./ConfirmationModal"
 import { InsertionModalTest } from "./insertion-modal-test"
 import { LivraisonTest } from "./Livraison-test"
-import { TestHuille } from "./TestHuille"
+import { ValidationHuille } from "@/components/ValidationHuille"
+
 
 const mockData = [
   { id: 1, date: "24 Mars 2024", type: "Feuilles",  poids: 10, quantity: 10, location: "Manakara", status: "En attente de livraison" },
   { id: 2, date: "24 Mars 2024", type: "Griffes", poids: 10, quantity: 10, location: "Menambondro", status: "Accepté" },
-  { id: 3, date: "24 Mars 2024", type: "Griffes", poids: 10, quantity: 10, location: "Manakara", status: "Test en attente" },
+  { id: 3, date: "24 Mars 2024", type: "Griffes", poids: 10, quantity: 10, location: "Manakara", status: "En cours de test" },
   { id: 4, date: "24 Mars 2024", type: "Clous", poids: 10, quantity: 10, location: "Menambondro", status: "En cours de test" },
   { id: 5, date: "24 Mars 2024", type: "Clous", poids: 10, quantity: 10, location: "Manakara", status: "Livraison en cours" },  
 ]
@@ -39,7 +40,6 @@ function MobileCard({
     switch (status) {
       case "En attente de livraison": return "bg-amber-100 text-amber-800 border-amber-200"
       case "Accepté": return "bg-green-100 text-green-800 border-green-200"
-      case "Test en attente": return "bg-blue-100 text-blue-800 border-blue-200"
       case "En cours de test": return "bg-purple-100 text-purple-800 border-purple-200"
       case "Livraison en cours": return "bg-orange-100 text-orange-800 border-orange-200"
       default: return "bg-gray-100 text-gray-800 border-gray-200"
@@ -110,7 +110,7 @@ function MobileCard({
 
 export function DataTable() {
   const [isLivraisonTestOpen, setIsLivraisonTestOpen] = useState(false)
-  const [isTestHuilleOpen, setIsTestHuilleOpen] = useState(false)
+  const [isValidationHuilleOpen, setIsValidationHuilleOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [openMenuId, setOpenMenuId] = useState<number | null>(null)
 
@@ -135,11 +135,17 @@ export function DataTable() {
     switch (status) {
       case "En attente de livraison": return "bg-amber-100 text-amber-800 border-amber-200"
       case "Accepté": return "bg-green-100 text-green-800 border-green-200"
-      case "Test en attente": return "bg-blue-100 text-blue-800 border-blue-200"
       case "En cours de test": return "bg-purple-100 text-purple-800 border-purple-200"
       case "Livraison en cours": return "bg-orange-100 text-orange-800 border-orange-200"
       default: return "bg-gray-100 text-gray-800 border-gray-200"
     }
+  }
+
+  const handleValidationConfirm = (decision: string, poidsAgree: string, observations: string) => {
+    console.log("Décision:", decision)
+    console.log("Poids agréé:", poidsAgree)
+    console.log("Observations:", observations)
+    // Ici vous pouvez mettre à jour le statut de l'élément dans votre state
   }
 
   const renderActions = (item: typeof mockData[0]) => {
@@ -159,22 +165,9 @@ export function DataTable() {
           </button>
         )
 
-      case "Test en attente":
-        return (
-          <button className={btnClass} onClick={() => setIsTestHuilleOpen(true)}>
-            <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-              <FlaskConical className="w-4 h-4 text-purple-600" />
-            </div>
-            <div>
-              <div className="font-medium text-gray-900">Test Huile</div>
-              <div className="text-xs text-gray-500">Effectuer le test</div>
-            </div>
-          </button>
-        )
-
       case "En cours de test":
         return (
-          <button className={btnClass} onClick={() => setIsConfirmLivraisonOpen(true)}>
+          <button className={btnClass} onClick={() => setIsValidationHuilleOpen(true)}>
             <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
               <CheckCircle className="w-4 h-4 text-green-600" />
             </div>
@@ -363,7 +356,7 @@ export function DataTable() {
         isOpen={isInsertionOpen}
         onClose={() => setIsInsertionOpen(false)}
       />
-      <FacturationModal
+      <FacturationHuilleEssentielle
         isOpen={isFacturationOpen}
         onClose={() => setIsFacturationOpen(false)}
       />
@@ -378,10 +371,11 @@ export function DataTable() {
         message="Voulez-vous valider ce test ?"
       />
 
-      {/* Modal Test Huile */}
-      <TestHuille
-        isOpen={isTestHuilleOpen}
-        onClose={() => setIsTestHuilleOpen(false)}
+      {/* Modal Validation Huile */}
+      <ValidationHuille
+        isOpen={isValidationHuilleOpen}
+        onClose={() => setIsValidationHuilleOpen(false)}
+        onConfirm={handleValidationConfirm}
       />
     </>
   )
